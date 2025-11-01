@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!-- 
+=================================================================
+DOCUMENTAÇÃO DO PROJETO: CONVITE ESPECIAL
+=================================================================
+Este arquivo implementa uma página de convite romântico interativo
+com animações, layout responsivo e efeitos visuais elegantes.
+
+Estrutura principal:
+1. Head: Meta tags, fonte e estilos CSS
+2. Body: 
+   - Título e subtítulo
+   - Grid de imagens com efeito hover
+   - Carrossel de mensagens
+   - Animação de corações flutuantes
+=================================================================
+-->
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite Especial</title>
+  <!-- 
+  SEÇÃO DE FONTES
+  - Great Vibes: Fonte cursiva elegante para o título principal
+  - Playfair Display: Fonte serif sofisticada para textos e subtítulos
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Main stylesheet: contains layout, component and animation rules. Keep styles grouped by visual blocks for easy maintenance. -->
+  <!-- 
+  SEÇÃO DE ESTILOS (CSS)
+  =================================================================
+  Organização dos estilos:
+  1. Configurações globais (body)
+  2. Elementos de texto (h1, p)
+  3. Container flexível e boxes
+  4. Animações e efeitos
+  5. Responsividade
+  6. Carrossel de mensagens
+  ================================================================= 
+  -->
+  <style>
+   /* 
+   CONFIGURAÇÕES GLOBAIS
+   =================================================================
+   - Define o tema romântico com gradiente suave de fundo
+   - Estabelece tipografia base e espaçamentos
+   - Configura suavização de fonte para melhor legibilidade
+   */
+    body{
+      margin: 0;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #fff0f6 0%, #ffe6f0 50%, #fff 100%);
+      color: #4a2030;
+      font-family: Georgia, 'Times New Roman', serif;
+      -webkit-font-smoothing:antialiased;
+    }
+
+  /* Título principal - usa fonte cursiva para tom romântico */
+  h1{
+      text-align: center;
+      color: #a21b3a;
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2rem;
+      margin: 0 0 12px;
+      letter-spacing: 1px;
+      line-height: 1.05;
+      text-shadow: 0 4px 14px rgba(162,27,58,0.12);
+      position: relative;
+    }
+
+   /* pequeno detalhe de coração antes do título
+     - Implementado com pseudo-elemento :before para não alterar o HTML.
+     - Altere cor/tamanho aqui se quiser outro símbolo decorativo.
+   */
+    h1:before{
+      content: '❤';
+      position: absolute;
+      left: calc(50% - 1.05em);
+      top: -0.65em;
+      transform: translateX(-100%);
+      color: #ff3b7a;
+      font-size: 1.2rem;
+      opacity: 0.95;
+      text-shadow: 0 2px 8px rgba(162,27,58,0.12);
+    }
+
+   /* Container flexível principal que segura os boxes de imagens
+     - Use .flex-container para alterar espaçamento, alinhamento e comportamento responsivo.
+   */
+   .flex-container{
+      display:flex;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,0.6);
+      max-width: 1000px;
+      padding: 24px;
+      border-radius: 16px;
+      align-items: center; /* alinhar boxes verticalmente ao centro */
+      justify-content: center;
+      box-shadow: 0 8px 30px rgba(162,27,58,0.12);
+      gap: 12px;
+      margin: 0 auto;
+    }
+
+   /* estilos base dos boxes (ajustados abaixo em bloco consolidado)
+     - Cada filho direto de .flex-container recebe dimensões e estilo base.
+     - Modificar aqui altera todos os boxes; para alterar apenas um, use classes específicas.
+   */
+
+  /* Imagem principal (primeiro box) - mantida quadrada para consistência visual */
+  .imagem1{
+      /* wrapper da imagem - mesma dimensão dos boxes para consistência */
+      width: 160px;
+      height: 160px;
+      padding: 0;
+      margin: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: none;
+      flex: 0 0 auto;
+    }
+
+    .imagem1 img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+   /* Boxes genéricos contendo imagens
+     - As regras garantem que a imagem preencha o box sem distorcer (object-fit: cover).
+     - 'aspect-ratio: 1/1' força o recorte quadrado em navegadores que suportam.
+   */
+    .box img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+   /* Destaque para o box "Torta Alemã"
+     - Aplica sombra e borda especial; hover tem maior destaque (ver .torta:hover mais abaixo).
+   */
+    .torta{
+      width: 160px;
+      height: 160px;
+      box-shadow: 0 12px 32px rgba(162,27,58,0.18);
+      border: 3px solid rgba(162,27,58,0.12);
+      transform: translateY(-4px);
+    }
+
+   /* Caption overlay (texto sobreposto na base do box)
+     - Usado para a legenda grande da torta. Mantemos text-transform: none para padronizar capitalização.
+   */
+   .caption{
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
+      color: #fff;
+      padding: 8px 8px 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-align: center;
+      text-transform: none; /* manter caixa normal */
+      letter-spacing: 0.6px;
+    }
+
+   /* Subtítulo / descrição abaixo do título principal
+     - Usa 'Playfair Display' para um tom romântico. Alterações aqui impactam o bloco de introdução.
+   */
+   p{
+      text-align: center;
+      color: #6b2e3f;
+      margin-top: 12px;
+      font-size: 1.05rem;
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+   /* Regras responsivas básicas
+     - Ajustam tamanhos dos boxes e paddings em telas menores.
+     - Para layouts mais complexos, considere uma media query adicional com 768px.
+   */
+   @media (max-width: 520px){
+      .flex-container>div { width:110px; height:110px; line-height:110px; font-size:22px; }
+      .imagem1{ width:100%; height:160px; }
+      .flex-container{ padding:12px; }
+      body{ padding: 18px; }
+    }
+
+   /* legendas visíveis para cada box (fallback se imagem não carregar)
+     - Essas legendas são posicionadas de forma absoluta dentro do box.
+     - text-transform: none garante padronização de capitalização (não usar ALL CAPS).
+   */
+    .box .label, .imagem1 .label, .flex-container>div .label{
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 8px;
+      text-align: center;
+      color: #fff;
+      font-weight: 700;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      font-size: 0.85rem;
+      pointer-events: none;
+      text-transform: none;
+    }
+
+    /* não mostrar a label padrão dentro do box da torta para evitar sobreposição com .caption */
+    .torta .label{ display: none; }
+
+    /* Corações animados subindo (cobre toda a página)
+       - Container fixo cobre toda a viewport; pointer-events:none evita bloquear cliques.
+       - z-index baixo (0) mantém os corações atrás dos elementos interativos.
+    */
+  .hearts{ position: fixed; inset: 0; pointer-events:none; overflow:visible; z-index: 0; }
+    .hearts .heart{
+      position: absolute;
+      bottom: -40px;
+      width: 18px;
+      height: 18px;
+      background: radial-gradient(circle at 30% 35%, #fff 0 10%, rgba(255,255,255,0) 11%), linear-gradient(45deg,#ff6b9a 0%, #ff2d6f 100%);
+      transform: rotate(-45deg);
+      border-radius: 3px 3px 50% 50%;
+      opacity: 0.9;
+      animation: rise var(--dur,6s) linear infinite;
+      will-change: transform, opacity;
+    }
+    .hearts .heart:before, .hearts .heart:after{
+      content: '';
+      position: absolute;
+      width: inherit;
+      height: inherit;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .hearts .heart:before{ top: calc(-0.55 * 100%); left: 0; }
+    .hearts .heart:after{ left: 50%; top: 0; transform: translateX(-50%); }
+
+    /* Animação 'rise' usada pelos elementos .heart
+       - translateY(-110vh) faz o coração subir além da viewport verticalmente.
+       - translateX usa a variável CSS --tx (setada dinamicamente em JS) para variar a trajetória horizontal.
+       - Começa com scale(0.6) e opacity 0 para suavizar a entrada.
+    */
+    @keyframes rise{
+      0%{ transform: translateY(0) translateX(0) rotate(-45deg) scale(0.6); opacity:0 }
+      10%{ opacity:1 }
+      100%{ transform: translateY(-110vh) translateX(var(--tx, -40px)) rotate(-45deg) scale(1); opacity:0 }
+    }
+
+  /* Ajustes para boxes de imagem
+    - z-index em .flex-container garante que os boxes fiquem acima dos corações decorativos.
+    - transições suaves estão habilitadas para permitir animações por hover e JS.
+  */
+  .flex-container{ position: relative; z-index: 5; }
+  .flex-container>div{ background-color: rgba(242,190,190,0.95); width: 160px; height: 160px; margin: 10px; text-align: center; font-size: 28px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); color: #4a2030; overflow: hidden; position: relative; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms; will-change: transform; }
+  /* garantir imagens quadradas e corte uniforme */
+  .box, .imagem1{ display:block; width:100%; height:100%; }
+  .box img, .imagem1 img{ width:100%; height:100%; object-fit:cover; display:block; aspect-ratio:1/1 }
+
+  /* movimento suave ao passar o mouse - será controlado por JS para parallax */
+  .flex-container>div:hover{ cursor: pointer; }
+
+  /* destaque extra para a torta */
+  .torta{ transform: translateY(-6px); box-shadow: 0 18px 44px rgba(162,27,58,0.22); }
+  .torta:hover{ transform: translateY(-10px) scale(1.04); box-shadow: 0 26px 64px rgba(162,27,58,0.28); }
+
+  /* Carrossel de mensagens */
+  .carousel-wrap{ max-width:780px; margin:20px auto; padding:0 12px; z-index:6; position:relative }
+  .carousel{ position:relative; overflow:hidden; border-radius:12px; background:#ffffff; box-shadow:0 8px 30px rgba(162,27,58,0.08); display:block }
+  .slides{ position:relative; width:100%; min-height:84px }
+  .slide{ position:absolute; left:0; right:0; top:0; bottom:0; opacity:0; transition: opacity 0.9s ease; padding:20px 40px; font-size:1.05rem; color:#6b2e3f; text-align:center; display:flex; align-items:center; justify-content:center }
+  .slide.active{ opacity:1 }
+  /* esconder controles (apenas automática) */
+  .car-btn{ display:none }
+  .carousel-dots{ display:none }
+    </style>
+</head>
+<body>
+  <h1>Convite especial: Almoço romântico de sábado</h1>
+  <p style="text-align:center; max-width:800px; margin:0 auto 14px; color:#7a3140;">Minha querida, que tal um almoço romântico neste sábado só para nós? Separei algumas opções deliciosas — escolha o que mais te der vontade e vamos a preparação.</p>
+
+  <div class ="flex-container">
+  <div class="imagem1"><img src="https://i.ytimg.com/vi/GJfAS-6hHnE/maxresdefault.jpg" alt="Almoço Especial"><span class="label">Almoçinho</span></div>
+    <div class="box"><img src="https://www.unileverfoodsolutions.com.br/dam/global-ufs/mcos/SLA/calcmenu/recipes/BR-recipes/chicken-&-other-poultry-dishes/strogonoff-de-frango/main-header.jpg" alt="Strogonoff"><span class="label">Strogonoff</span></div>
+    <div class="box"><img src="https://sabores-new.s3.amazonaws.com/public/2024/11/Lasanha_tradicional-1024x606.jpg" alt="Lasanha"><span class="label">Lasanha</span></div>
+    <div class="box torta"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiI6UH0XYi6osqwBk6bbMSO76TxiuLWPM5w&s" alt="Torta Alemã"><span class="caption">Torta Alemã</span></div>
+  <div class="box"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ0y0xB9MdjvhuYPC5SstLi_NFyRDW16FfYw&s" alt="Espaguete à bolonhesa com Fritas"><span class="label">Espaguete à Bolonhesa com Fritas</span></div>
+
+  </div> <!-- fim .flex-container -->
+
+  <!-- Carrossel de mensagens românticas -->
+  <section class="carousel-wrap" aria-label="Mensagens para Rayssa">
+    <div class="carousel">
+      <div class="slides" id="slides">
+        <div class="slide">Rayssa, meu amor, aceita um almoço só para nós neste sábado? ❤️</div>
+        <div class="slide">Quero fazer cada prato com carinho, só para ver seu sorriso à mesa.</div>
+        <div class="slide">Reservei um momento especial: comida boa, música suave e só nós dois.</div>
+        <div class="slide">Você é a mulher da minha vida — um almoço com você seria uma honra.</div>
+        <div class="slide">Aceita ser minha convidada para um almoço cheio de afeto e surpresas?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- container de corações animados (decorativo) - colocado fora do flex para cobrir a página inteira -->
+  <div class="hearts" aria-hidden="true"></div>
+
+  <!-- 
+  SEÇÃO DE SCRIPTS (JavaScript)
+  =================================================================
+  Funcionalidades implementadas:
+  1. Geração dinâmica de corações animados
+  2. Carrossel automático de mensagens
+  3. Efeito parallax nos boxes de imagens
+  ================================================================= 
+  -->
+  <script>
+  /*
+   * GERAÇÃO DE CORAÇÕES ANIMADOS
+   * ----------------------------------------------------------------
+   * - Cria elementos span.heart dinamicamente
+   * - Aplica posicionamento e animação aleatórios
+   * - Distribuição orgânica pela página
+   */
+    (function generateHearts(){
+      const heartsContainer = document.querySelector('.hearts');
+      const count = 24; // número de corações ativos
+  for(let i=0;i<count;i++){
+        const s = document.createElement('span');
+        s.className = 'heart';
+        const size = (Math.random()*18 + 10).toFixed(2);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.left = Math.random()*100 + '%';
+        s.style.bottom = -(Math.random()*40 + 10) + 'px';
+        s.style.opacity = (0.6 + Math.random()*0.4).toFixed(2);
+  s.style.animationDuration = (5 + Math.random()*5).toFixed(2) + 's';
+  s.style.animationDelay = (Math.random()*3).toFixed(2) + 's';
+  // variar deslocamento horizontal e duração via variáveis CSS
+  s.style.setProperty('--tx', (Math.random()*220 - 110).toFixed(2) + 'px');
+  s.style.setProperty('--dur', (5 + Math.random()*5).toFixed(2) + 's');
+        heartsContainer.appendChild(s);
+      }
+    })();
+
+  /*
+   * CARROSSEL AUTOMÁTICO DE MENSAGENS
+   * ----------------------------------------------------------------
+   * - Implementa transição suave entre slides via opacity
+   * - Rotação automática a cada 4 segundos
+   * - Gerenciamento de estados via classes CSS
+   */
+    (function carousel(){
+      const slides = document.getElementById('slides');
+      const slideEls = Array.from(slides.querySelectorAll('.slide'));
+      let index = 0;
+      const interval = 4000; // tempo entre mensagens
+      // preparar slides
+      slideEls.forEach((el,i)=>{ el.classList.toggle('active', i===0); });
+
+      function show(i){
+        slideEls.forEach((el, idx)=> el.classList.toggle('active', idx===i));
+        index = i;
+      }
+
+      function next(){ show((index+1) % slideEls.length); }
+
+      setInterval(next, interval);
+    })();
+
+    /*
+     * EFEITO PARALLAX NOS BOXES
+     * ----------------------------------------------------------------
+     * - Rastreia movimento do mouse sobre cada box
+     * - Calcula transformações 3D baseadas na posição do cursor
+     * - Aplica perspectiva e rotação para efeito de profundidade
+     */
+    (function boxMotion(){
+      const items = document.querySelectorAll('.flex-container>div');
+      items.forEach(item=>{
+        function onMove(e){
+          const rect = item.getBoundingClientRect();
+          const px = ( (e.clientX - rect.left) / rect.width ) - 0.5; // -0.5 -> 0.5
+          const py = ( (e.clientY - rect.top) / rect.height ) - 0.5;
+          const tx = px * 14; // translateX
+          const ty = py * 10; // translateY
+          const rx = py * -6; // rotateX
+          const ry = px * 8; // rotateY
+          item.style.transform = `perspective(600px) translate3d(${tx}px, ${ty}px, 0) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        }
+        function onLeave(){ item.style.transform = ''; }
+        item.addEventListener('mousemove', onMove);
+        item.addEventListener('mouseleave', onLeave);
+        // small subtle idle animation for torta
+        if(item.classList.contains('torta')){
+          item.style.transition = 'transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 260ms';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
